@@ -47,55 +47,67 @@ class MainApp extends StatefulWidget {
   _MainApp createState() => new _MainApp();
 }
 class _MainApp extends State<MainApp>{
-
-  int _counter = 1;
+  Choice _selectedChoice = choices[0];
+  void _select(Choice  value) {
+    setState(() {
+      _selectedChoice = value;
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    return new DefaultTabController(
-        length: mainChoices.length,
-        child: new Scaffold(
-            appBar: new AppBar(
-                title: const Text('Experimental App'),
-                bottom: new TabBar(
-                    isScrollable: true,
-                    tabs: mainChoices.map((MainChoice choice){
-                      return new Tab(
-                        icon: new Icon(choice.icon),
-                      );
-                    }).toList()
-                )
+    return new Scaffold(
+      appBar: new AppBar(
+          title: new Text(_selectedChoice.title),
+          actions: <Widget> [
+            new IconButton(
+                icon: new Icon(choices[0].icon),
+                onPressed: (){ _select(choices[0]); },
             ),
-            body: new TabBarView(
-                children: mainChoices.map((MainChoice c){
-                  switch(c.title){
-                    case 'Home':
-                      return new MyHomePage();
-                      break;
-                    case 'Today':
-                      return new MyHomePage();
-                      break;
-                  }
-                }).toList()
-            )
-        )
+            new IconButton(
+              icon: new Icon(choices[1].icon),
+              onPressed: (){ _select(choices[1]); },
+            ),
+            new IconButton(
+              icon: new Icon(choices[2].icon),
+              onPressed: (){ _select(choices[2]); },
+            ),
+          ]
+      ),
+      body: new ChoiceCard(choice: _selectedChoice),
     );
   }
 
 }
 
-class MainChoice{
-  const MainChoice({ this.title, this.icon });
+class Choice{
+  const Choice({ this.title, this.icon });
   final String title;
   final IconData icon;
   bool operator ==(other){
-    return (other is MainChoice && other.title == title);
+    return (other is Choice && other.title == title);
   }
 }
 
-const List<MainChoice> mainChoices = const <MainChoice>[
-  const MainChoice(title: 'Week', icon: Icons.view_week),
-  const MainChoice(title: 'Today', icon: Icons.calendar_today),
- // const MainChoice(title: 'Select Location', icon: Icons.location_on)
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'Week', icon: Icons.view_week),
+  const Choice(title: 'Today', icon: Icons.calendar_today),
+  const Choice(title: 'Select Location', icon: Icons.location_on)
 ];
 
 
+class ChoiceCard extends StatelessWidget{
+  const ChoiceCard({ Key key, this.choice }) : super(key: key);
+
+  final Choice choice;
+  @override
+  Widget build(BuildContext context){
+    switch (choice.title){
+      case 'Week':
+        return new MyHomePage();
+      case 'Today':
+        return new MyHomePage();
+      default:
+        return new MyHomePage();
+    }
+  }
+}
