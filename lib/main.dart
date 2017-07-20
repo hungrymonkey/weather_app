@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'shared/city_entry.dart';
+import 'shared/city_weather_entry.dart';
+import 'views/today.dart';
 import 'views/home.dart';
+
+
 void main() {
   runApp(new MyApp());
 }
@@ -47,12 +52,23 @@ class MainApp extends StatefulWidget {
   _MainApp createState() => new _MainApp();
 }
 class _MainApp extends State<MainApp>{
+
+  CityEntry homeCity = new CityEntry(id: 1850147, name: "Tokyo", country: "JP", lon: 35.689499, lat: 139.691711);
+
   Choice _selectedChoice = choices[0];
+  CityWeatherEntry cityWeatherEntry =
+    new CityWeatherEntry(cityEntry: new CityEntry(id: 1850147, name: "Tokyo", country: "JP", lon: 35.689499, lat: 139.691711));
   void _select(Choice  value) {
     setState(() {
       _selectedChoice = value;
     });
   }
+  void _changeCity(CityEntry value){
+    setState((){cityWeatherEntry.setCity(value);});
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -73,7 +89,7 @@ class _MainApp extends State<MainApp>{
             ),
           ]
       ),
-      body: new ChoiceCard(choice: _selectedChoice),
+      body: new ChoiceCard(choice: _selectedChoice, currentCity: cityWeatherEntry),
     );
   }
 
@@ -96,15 +112,17 @@ const List<Choice> choices = const <Choice>[
 
 
 class ChoiceCard extends StatelessWidget{
-  const ChoiceCard({ Key key, this.choice }) : super(key: key);
+  const ChoiceCard({ Key key, this.choice, this.currentCity }) : super(key: key);
 
   final Choice choice;
+  final CityWeatherEntry currentCity;
+  //final CityEntry homeCity;
   @override
   Widget build(BuildContext context){
     switch (choice.title){
-      case 'Week':
-        return new MyHomePage();
       case 'Today':
+        return new TodayPage(currentCity);
+      case 'Week':
         return new MyHomePage();
       default:
         return new MyHomePage();
