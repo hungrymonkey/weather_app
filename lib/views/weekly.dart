@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import './shared/icon_helper.dart';
+import './shared/forecast_tile.dart';
 import '../models/weather_entry.dart';
+
 class WeeklyPage extends StatefulWidget{
 
   const WeeklyPage(this.weeklyForecast);
@@ -17,14 +18,22 @@ class _WeeklyPage extends State<WeeklyPage> {
 
 
   Widget buildWeekly(BuildContext context){
-    return new Center(
-      child: new Text("weekly page"),
+    return new ListView(
+      children: getWeeklyTile(),
     );
+  }
+  getWeeklyTile (){
+    List<Widget> wid = new List();
+    //hard coded 8 since forecast at 8 hr intervals
+    for(var i = 0; i < widget.weeklyForecast.entries.length; i+=8 ){
+      wid.add(new ForecastTile(widget.weeklyForecast.entries.elementAt(i)));
+      print(widget.weeklyForecast.entries.elementAt(i).forecastTime.toString());
+    }
+    return wid;
   }
   @override
   Widget build(BuildContext context) {
-      return new Center(
-          child: new Text("weekly page"),
-      );
+      return buildWeekly(context);
   }
+
 }

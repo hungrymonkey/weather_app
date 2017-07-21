@@ -40,7 +40,6 @@ class _TodayPage extends State<TodayPage> {
   Widget buildTommorrowCard(BuildContext context) {
     final TextStyle textStyle = Theme.of(context).textTheme.display1;
     if ( widget.weeklyForecast != null ) {
-      if(widget.weeklyForecast.entries != null) {
         return new Card(
           child: new Column(
             mainAxisSize: MainAxisSize.min,
@@ -50,22 +49,21 @@ class _TodayPage extends State<TodayPage> {
                       style: textStyle)),
               new Text(
                   '${widget.weeklyForecast.entries
-                      .elementAt(0)
+                      .elementAt(8)
                       .temp
-                      .toStringAsFixed(1)}',
+                      .toStringAsFixed(1)} °C',
                   style: textStyle),
               new IconLoader(widget.weeklyForecast.entries
-                  .elementAt(0)
+                  .elementAt(8)
                   .iconType),
               new Text('${widget.weeklyForecast.entries
-                  .elementAt(0)
+                  .elementAt(8)
                   .condition}',
                   style: textStyle),
 
             ],
           ),
         );
-      }
     }
 
       return new Card(
