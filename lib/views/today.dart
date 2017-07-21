@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-
-import '../shared/city_entry.dart';
-import '../shared/city_weather_entry.dart';
+import './shared/icon_helper.dart';
+import '../models/weather_entry.dart';
 class TodayPage extends StatefulWidget{
 
-  const TodayPage(this.currentCity);
+  const TodayPage(this.todayEntry);
 
-  final CityWeatherEntry currentCity;
+  final TodayEntry todayEntry;
 
 
   @override
@@ -16,15 +15,15 @@ class _TodayPage extends State<TodayPage> {
 
 
   Widget build(BuildContext context){
-    print('************ REBUILDING loading weather data');
-    if(widget.currentCity.getCondition() == '') {
+    print('**** REBUILDING today page *****');
+    if ( widget.todayEntry != null ) {
+      return new Center(
+          child: new IconLoader(widget.todayEntry.entry.iconType)
+      );
+    }else{
       return new Container(
         child: const CircularProgressIndicator(),
         alignment: FractionalOffset.center,
-      );
-    }else{
-      return new Center(
-        child: new Text("Today Page ${widget.currentCity.getCondition()}"),
       );
     }
   }

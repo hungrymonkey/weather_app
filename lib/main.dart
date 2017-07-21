@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'shared/city_entry.dart';
-import 'shared/city_weather_entry.dart';
+import 'models/weather_entry.dart';
 import 'views/today.dart';
 import 'views/home.dart';
 
@@ -53,20 +53,38 @@ class MainApp extends StatefulWidget {
 }
 class _MainApp extends State<MainApp>{
 
-  CityEntry homeCity = new CityEntry(id: 1850147, name: "Tokyo", country: "JP", lon: 35.689499, lat: 139.691711);
+  CityEntry _homeCity = new CityEntry(id: 1850147, name: "Tokyo", country: "JP", lon: 35.689499, lat: 139.691711);
 
   Choice _selectedChoice = choices[0];
-  CityWeatherEntry cityWeatherEntry =
-    new CityWeatherEntry(cityEntry: new CityEntry(id: 1850147, name: "Tokyo", country: "JP", lon: 35.689499, lat: 139.691711));
+  TodayEntry _today;
+
   void _select(Choice  value) {
     setState(() {
       _selectedChoice = value;
     });
   }
   void _changeCity(CityEntry value){
-    setState((){cityWeatherEntry.setCity(value);});
-  }
 
+      TodayEntry.fetch( cityEntry: _homeCity )
+          .then( (TodayEntry t){
+        setState(() {
+          this._today = t;
+          _homeCity = value;
+        });
+      });
+  }
+  @override
+  void initState(){
+    super.initState();
+    if( _today == null){
+      TodayEntry.fetch( cityEntry: _homeCity )
+          .then( (TodayEntry t){
+            setState(() {
+              this._today = t;
+          });
+      });
+    }
+  }
 
 
   @override
@@ -89,7 +107,7 @@ class _MainApp extends State<MainApp>{
             ),
           ]
       ),
-      body: new ChoiceCard(choice: _selectedChoice, currentCity: cityWeatherEntry),
+      body: new ChoiceCard(choice: _selectedChoice, todayEntry: _today),
     );
   }
 
@@ -105,23 +123,23 @@ class Choice{
 }
 
 const List<Choice> choices = const <Choice>[
-  const Choice(title: 'Week', icon: Icons.view_week),
   const Choice(title: 'Today', icon: Icons.calendar_today),
+  const Choice(title: 'Week', icon: Icons.view_week),
   const Choice(title: 'Select Location', icon: Icons.location_on)
 ];
 
 
 class ChoiceCard extends StatelessWidget{
-  const ChoiceCard({ Key key, this.choice, this.currentCity }) : super(key: key);
+  const ChoiceCard({ Key key, this.choice, this.todayEntry }) : super(key: key);
 
   final Choice choice;
-  final CityWeatherEntry currentCity;
+  final TodayEntry todayEntry;
   //final CityEntry homeCity;
   @override
   Widget build(BuildContext context){
     switch (choice.title){
       case 'Today':
-        return new TodayPage(currentCity);
+        return new TodayPage(todayEntry);
       case 'Week':
         return new MyHomePage();
       default:
