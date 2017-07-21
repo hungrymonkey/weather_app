@@ -3,7 +3,7 @@ import 'shared/city_entry.dart';
 import 'models/weather_entry.dart';
 import 'views/today.dart';
 import 'views/home.dart';
-
+import 'views/weekly.dart';
 
 void main() {
   runApp(new MyApp());
@@ -57,7 +57,7 @@ class _MainApp extends State<MainApp>{
 
   Choice _selectedChoice = choices[0];
   TodayEntry _today;
-
+  WeeklyForecast _week;
   void _select(Choice  value) {
     setState(() {
       _selectedChoice = value;
@@ -72,6 +72,13 @@ class _MainApp extends State<MainApp>{
           _homeCity = value;
         });
       });
+      WeeklyForecast.fetch( cityEntry: _homeCity )
+          .then( (WeeklyForecast w){
+        setState(() {
+          this._week = w;
+          _homeCity = value;
+        });
+      });
   }
   @override
   void initState(){
@@ -82,6 +89,14 @@ class _MainApp extends State<MainApp>{
             setState(() {
               this._today = t;
           });
+      });
+    }
+    if(_week == null){
+      WeeklyForecast.fetch( cityEntry: _homeCity )
+          .then( (WeeklyForecast w){
+        setState(() {
+          this._week = w;
+        });
       });
     }
   }
@@ -107,7 +122,7 @@ class _MainApp extends State<MainApp>{
             ),
           ]
       ),
-      body: new ChoiceCard(choice: _selectedChoice, todayEntry: _today),
+      body: new ChoiceCard(choice: _selectedChoice, todayEntry: _today, weeklyForecast: _week,),
     );
   }
 
@@ -130,18 +145,19 @@ const List<Choice> choices = const <Choice>[
 
 
 class ChoiceCard extends StatelessWidget{
-  const ChoiceCard({ Key key, this.choice, this.todayEntry }) : super(key: key);
+  const ChoiceCard({ Key key, this.choice, this.todayEntry, this.weeklyForecast }) : super(key: key);
 
   final Choice choice;
   final TodayEntry todayEntry;
+  final WeeklyForecast weeklyForecast;
   //final CityEntry homeCity;
   @override
   Widget build(BuildContext context){
     switch (choice.title){
       case 'Today':
-        return new TodayPage(todayEntry);
+        return new TodayPage(todayEntry,weeklyForecast);
       case 'Week':
-        return new MyHomePage();
+        return new WeeklyPage(weeklyForecast);
       default:
         return new MyHomePage();
     }
