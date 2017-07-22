@@ -22,15 +22,14 @@ class _LocationPage extends State<LocationPage>{
 
   @override
   Widget build(BuildContext context){
-    print('********* Location Page ');
+    print('********* Location Page');
     final TextStyle captionTextStyle = Theme.of(context).textTheme.title;
     return new Scaffold(
       body: new CustomScrollView(
         slivers: <Widget>[
           new SliverAppBar(
               expandedHeight: _kFlexibleSpaceMaxHeight,
-              floating: true,
-              snap: true,
+              pinned: true,
               flexibleSpace: new FlexibleSpaceBar(
                   background: new Stack(
                     fit: StackFit.expand,
@@ -73,7 +72,8 @@ class _LocationPage extends State<LocationPage>{
                   child: new Column(
                       children: <Widget>[
                         _createEntry(context, "Los Angles,US"),
-                        _createEntry(context, "Tokyo,JP")
+                      const Divider(),
+                      _createEntry(context, "Tokyo,JP")
                       ]
                   ),
                 )
