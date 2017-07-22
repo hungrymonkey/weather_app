@@ -1,19 +1,20 @@
 import 'package:flutter/foundation.dart';
-
+//probably needs at least length 4.
+//not going to test it
 class Trie {
   Trie() : root = new TrieNode(value: '', end: false){
 
   }
   TrieNode root;
 
-  insert(String subString){
-    root.insert(subString);
+  insert(String word){
+    root.insert(word);
   }
   bool contains( String word) {
     return root.contains(word);
   }
-  Set<String> autocomplete(String prefix, [limit=10]){
-    return root.autocomplete(prefix,limit);
+  Set<String> autocomplete(String word, [limit=10]){
+    return root.autocomplete(word,limit);
   }
 }
 class TrieNode {
@@ -28,11 +29,12 @@ class TrieNode {
 
   insert(String subString) {
     TrieNode curr = this;
-    for(var i = 0; i < subString.length; i++){
-      String char = subString[i];
+    var lowerString = subString.toLowerCase();
+    for(var i = 0; i < lowerString.length; i++){
+      String char = lowerString[i];
       if(!curr.children.containsKey(char)){
         curr.children[char] = new TrieNode(
-            value: char, end: i + 1 == subString.length
+            value: char, end: i + 1 == lowerString.length
         );
       }
       curr = curr.children[char];
@@ -41,18 +43,36 @@ class TrieNode {
   }
 
   bool contains(String word) {
+    return _contains(word.toLowerCase());
+  }
+  bool _contains(String word){
     if (word.length == 0) {
       return end;
     }
     String firstChar = word[0];
+    //String inMap = children
     return children.containsKey(firstChar) ?
     children[firstChar].contains(word.substring(1)) : false;
   }
   Set<String> all_prefixes(num limit){
-    Set<String> prefixes = new Set();
+    Set<String> words = new Set();
+    _all_prefixes(this, "", words, limit);
+    var result = words.map((String s) {
+      s[0].toUpperCase() + s.substring(2,s.length-2)+s.substring(s.length-2).toUpperCase();
+    }).toSet();
+    return result;
+  }
+  _all_prefixes( TrieNode n, String s, Set<String> words, num limit ){
+    if(limit >= words.length)
+      return words;
+    if(n.end){
+      words.add(s+n.value);
+    }
+    n.children.values.forEach((v){
+      _all_prefixes(v, s, words, limit);
+    });
 
   }
-
   Set<String> autocomplete(String prefix, num limit) {
     Set<String> result = new Set();
     //transverse the trie

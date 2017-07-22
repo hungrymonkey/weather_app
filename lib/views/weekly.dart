@@ -17,12 +17,12 @@ class WeeklyPage extends StatefulWidget{
 class _WeeklyPage extends State<WeeklyPage> {
 
 
-  Widget buildWeekly(BuildContext context){
+  Widget _buildWeekly(BuildContext context){
     return new ListView(
-      children: getWeeklyTile(),
+      children: _getWeeklyTile(),
     );
   }
-  getWeeklyTile (){
+  _getWeeklyTile (){
     List<Widget> wid = new List();
     //hard coded 8 since forecast at 8 hr intervals
     for(var i = 0; i < widget.weeklyForecast.entries.length; i+=8 ){
@@ -33,7 +33,7 @@ class _WeeklyPage extends State<WeeklyPage> {
   }
   @override
   Widget build(BuildContext context) {
-      return buildWeekly(context);
+      return _buildWeekly(context);
   }
 
 }

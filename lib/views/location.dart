@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../shared/city_entry.dart';
-
+import '../models/valid_city_loader.dart';
 
 class LocationPage extends StatefulWidget {
-  const LocationPage({ Key key, this.currentCity, this.updater}) : super(key: key);
+  const LocationPage({ Key key, this.currentCity, this.updater})
+      : super(key: key);
   final CityEntry currentCity;
   final ValueChanged<CityEntry> updater;
   @override
@@ -11,10 +12,16 @@ class LocationPage extends StatefulWidget {
 }
 const double _kFlexibleSpaceMaxHeight = 128.0;
 class _LocationPage extends State<LocationPage>{
-
+  CityNames _cityNames;
   String _searchingQuery = '';
   String _resultQuery = '';
-  List<String> _fetchCities = [];
+  Set<String> _fetchCities;
+
+  @override
+  void initState(){
+    super.initState();
+    _cityNames = new CityNames();
+  }
   void sendUpdates(CityEntry value){
     if(widget.updater != null)
       widget.updater(value);
