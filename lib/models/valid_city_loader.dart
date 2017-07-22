@@ -3,7 +3,7 @@ import 'dart:async' show Future;
 import 'package:flutter/services.dart' show rootBundle;
 import './../shared/trie.dart';
 //declared in pubspec
-const CITY_LIST = 'assets/res/valid_cities.txt';
+const CITY_LIST = 'assets/res/valid_jp_us_cities.txt';
 
 class CityNames{
   List<String> locations;
@@ -14,8 +14,8 @@ class CityNames{
   Future<Set<String>> autocomplete(String s) async {
     return cTrie.autocomplete(s);
   }
-  static Future<Trie> createTrie() async {
-    return await _handleTrie();
+  static Future<CityNames> makeCity() async{
+    return new CityNames();
   }
   bool contains(String word){
     return cTrie.contains(word);

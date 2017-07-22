@@ -14,13 +14,27 @@ const double _kFlexibleSpaceMaxHeight = 128.0;
 class _LocationPage extends State<LocationPage>{
   CityNames _cityNames;
   String _searchingQuery = '';
+  String _resultQuery = '';
   Set<String> _fetchCities;
 
   @override
   void initState(){
     super.initState();
-    _cityNames = new CityNames();
+
     _fetchCities = new Set();
+    print(_cityNames == null);
+    print("checking if null" );
+    if(_cityNames == null) {
+      CityNames.makeCity().then(
+              (CityNames cNames) {
+            setState(() {
+              print("first state");
+
+              _cityNames = cNames;
+            });
+          }
+      );
+    }
   }
   void sendUpdates(CityEntry value){
     if(widget.updater != null)
@@ -77,14 +91,9 @@ class _LocationPage extends State<LocationPage>{
             <Widget>[
               new Container(
                 margin: const EdgeInsets.all(8.0),
-                child: new Card(
-                  child: new Column(
-                      children:
-                      _buildCityEntry( context),
-                  ),
+                child: _buildCityList( context),
 
-                )
-              )
+                ),
             ]
         ),
     );
@@ -106,18 +115,26 @@ class _LocationPage extends State<LocationPage>{
         )
     );
   }
-  List<Widget> _buildCityEntry( BuildContext context){
+  Widget _buildCityList( BuildContext context){
     print(_fetchCities.toString());
+    var l = new List();
+
     if( _fetchCities.isNotEmpty ) {
-      var l = new List();
       for (var c in _fetchCities) {
         l.add(_createEntry(context, c));
         l.add(const Divider());
       }
       l.removeLast();
-      return l;
-    }else
-      return [];
+      return new Card(
+        child: new Column(
+            children: l,
+        ),
+      );
+    }
+    return new Card();
+
+
+
   }
   Widget _createEntry(BuildContext context, String s){
     return new ListTile(
@@ -138,20 +155,23 @@ class _LocationPage extends State<LocationPage>{
     if (str == '') { return; }
 
     setState((){
+      print("middle");
+
       _searchingQuery = str;
       _fetchCities = new Set();
     });
     print('*******' + _searchingQuery + 'not fetch');
-
-    _cityNames.autocomplete(_searchingQuery).then((Set<String> s ){
-      setState((){
-        _fetchCities = s;
-        print('*******' + _searchingQuery + 'fetch');
-        print(_cityNames.contains("Toyko,JP") );
-
-        print(_fetchCities.toString());
-      });
-    });
+    if(_cityNames != null) {
+      if(_searchingQuery != _resultQuery) {
+        _cityNames.autocomplete(_searchingQuery).then((Set<String> s) {
+          setState(() {
+            print("last state");
+            _fetchCities = s;
+            _resultQuery = _searchingQuery;
+          });
+        });
+      }
+    }
 
 
   }

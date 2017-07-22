@@ -23,6 +23,8 @@ flutter:
   assets:
     - assets/res/city.list.json
     - assets/res/valid_cities.txt
+    - assets/res/valid_jp_us_cities.txt
+
   # To add assets to your application, add an assets section here, in
   # this "flutter" section, as in:
   # assets:
