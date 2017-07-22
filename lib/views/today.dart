@@ -3,7 +3,7 @@ import './shared/icon_helper.dart';
 import '../models/weather_entry.dart';
 
 
-const double _kFlexibleSpaceMaxHeight = 128.0;
+const double _kFlexibleSpaceMaxHeight = 100.0;
 
 class TodayPage extends StatefulWidget{
 
@@ -107,7 +107,8 @@ class _TodayPage extends State<TodayPage> {
           pinned: true,
           expandedHeight: _kFlexibleSpaceMaxHeight,
           flexibleSpace: new FlexibleSpaceBar(
-            title: new Text('${widget.todayEntry.city}, ${widget.todayEntry.country}'),
+            title: new Text('${widget.todayEntry.city}, ${widget.todayEntry.country}',
+            style: Theme.of(context).textTheme.display1.copyWith(color: Colors.white, fontSize: 20.0)),
             // TODO(abarth): Wire up to the parallax in a way that doesn't pop during hero transition.
             background: new Stack(
               fit: StackFit.expand,

@@ -5,6 +5,7 @@ import 'views/today.dart';
 import 'views/home.dart';
 import 'views/weekly.dart';
 import 'views/location.dart';
+import 'models/valid_city_loader.dart';
 void main() {
   runApp(new MyApp());
 }
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         // the application is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: new MainApp(title: 'Weatherforcast'),
+      home: new MainApp(title: 'Weatherforecast'),
     );
   }
 
@@ -54,7 +55,7 @@ class MainApp extends StatefulWidget {
 class _MainApp extends State<MainApp>{
 
   CityEntry _homeCity = new CityEntry(id: 1850147, name: "Tokyo", country: "JP", lon: 35.689499, lat: 139.691711);
-
+  CityNames _cityNames;
   Choice _selectedChoice = choices[0];
   TodayEntry _today;
   WeeklyForecast _week;
@@ -99,6 +100,7 @@ class _MainApp extends State<MainApp>{
         });
       });
     }
+
   }
 
 
@@ -122,6 +124,7 @@ class _MainApp extends State<MainApp>{
             ),
           ]
       ),
+      //this code seems to be throwing errors
       body: new ChoiceCard(
           choice: _selectedChoice, homeCity: _homeCity,
           updater: _changeCity,

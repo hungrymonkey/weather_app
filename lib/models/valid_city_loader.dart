@@ -15,6 +15,7 @@ class CityNames{
     return cTrie.autocomplete(s);
   }
   static Future<CityNames> makeCity() async{
+    print("******** creating autocomplete city trie *******");
     return new CityNames();
   }
   bool contains(String word){

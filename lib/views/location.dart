@@ -44,7 +44,8 @@ class _LocationPage extends State<LocationPage>{
   @override
   Widget build(BuildContext context){
     print('********* Location Page');
-    final TextStyle captionTextStyle = Theme.of(context).textTheme.title;
+    final TextStyle captionTextStyle =
+    Theme.of(context).textTheme.display1.copyWith(color: Colors.white, fontSize: 30.0);
     return new Scaffold(
       body: new CustomScrollView(
         slivers: <Widget>[
