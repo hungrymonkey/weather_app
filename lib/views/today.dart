@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import './shared/icon_helper.dart';
 import '../models/weather_entry.dart';
+
+
+const double _kFlexibleSpaceMaxHeight = 128.0;
+
 class TodayPage extends StatefulWidget{
 
   const TodayPage(this.todayEntry, this.weeklyForecast);
@@ -14,7 +18,7 @@ class TodayPage extends StatefulWidget{
 }
 class _TodayPage extends State<TodayPage> {
 
-  Widget buildTodayCard(BuildContext context) {
+  Widget _buildTodayCard(BuildContext context) {
     final TextStyle textStyle = Theme.of(context).textTheme.display1;
 
       return new Card(
@@ -37,7 +41,7 @@ class _TodayPage extends State<TodayPage> {
      );
 
   }
-  Widget buildTommorrowCard(BuildContext context) {
+  Widget _buildTomorrowCard(BuildContext context) {
     final TextStyle textStyle = Theme.of(context).textTheme.display1;
     if ( widget.weeklyForecast != null ) {
         return new Card(
@@ -74,43 +78,48 @@ class _TodayPage extends State<TodayPage> {
       );
 
   }
+  List<Widget> _buildCards(BuildContext context){
+    return <Widget>[
+      new Column(children: <Widget>[
+        new Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: _buildTodayCard(context),
+        ),
+      ],
+      ),
+      new Column(children: <Widget>[
+        new Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: _buildTomorrowCard(context),
+        ),
+      ],
+      )
+    ];
+  }
   Widget build(BuildContext context){
     print('**** REBUILDING today page *****');
     final TextStyle textStyle = Theme.of(context).textTheme.display1;
     if ( widget.todayEntry != null ){
 
-      return new Column(
-        children: <Widget>[
-          new Center(
-                child: new Text('${widget.todayEntry.city}, ${widget.todayEntry.country}',
-                      style: textStyle)
-          ),
-          new Column(
+      return new CustomScrollView(
+        slivers: <Widget>[
+        new SliverAppBar(
+          pinned: true,
+          expandedHeight: _kFlexibleSpaceMaxHeight,
+          flexibleSpace: new FlexibleSpaceBar(
+            title: new Text('${widget.todayEntry.city}, ${widget.todayEntry.country}'),
+            // TODO(abarth): Wire up to the parallax in a way that doesn't pop during hero transition.
+            background: new Stack(
+              fit: StackFit.expand,
               children: <Widget>[
-                new Column(children: <Widget>[
-
-                    new Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: buildTodayCard(context),
-                    ),
-                  ],
-                ),
-                new Column(children: <Widget>[
-                    new Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: buildTommorrowCard(context),
-                    ),
-                  ],
-                )
-
 
               ],
             ),
-        ],
-      );
-      //return new Center(
-      //    child: new IconLoader(widget.todayEntry.entry.iconType)
-      //);
+
+          ),
+        ),
+        new SliverList(delegate: new SliverChildListDelegate(_buildCards(context),)),
+        ]);
     }else{
       return new Card(
         child:  new Container(

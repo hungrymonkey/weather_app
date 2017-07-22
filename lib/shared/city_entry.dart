@@ -2,16 +2,14 @@ import 'package:flutter/foundation.dart';
 
 class CityEntry{
   CityEntry({
-    @required this.id,
+     this.id,
     @required this.name,
     @required this.country,
-    @required this.lon,
-    @required this.lat,
-  }) : assert(id != null),
+     this.lon,
+     this.lat,
+  }) :
        assert(name!= null),
-       assert(country != null),
-       assert(lon != null),
-       assert(lat != null);
+       assert(country != null);
 
   final num id;
   final String name;

@@ -4,7 +4,7 @@ import 'models/weather_entry.dart';
 import 'views/today.dart';
 import 'views/home.dart';
 import 'views/weekly.dart';
-
+import 'views/location.dart';
 void main() {
   runApp(new MyApp());
 }
@@ -65,14 +65,14 @@ class _MainApp extends State<MainApp>{
   }
   void _changeCity(CityEntry value){
 
-      TodayEntry.fetch( cityEntry: _homeCity )
+      TodayEntry.fetch( cityEntry: value )
           .then( (TodayEntry t){
         setState(() {
           this._today = t;
           _homeCity = value;
         });
       });
-      WeeklyForecast.fetch( cityEntry: _homeCity )
+      WeeklyForecast.fetch( cityEntry: value )
           .then( (WeeklyForecast w){
         setState(() {
           this._week = w;
@@ -122,7 +122,11 @@ class _MainApp extends State<MainApp>{
             ),
           ]
       ),
-      body: new ChoiceCard(choice: _selectedChoice, todayEntry: _today, weeklyForecast: _week,),
+      body: new ChoiceCard(
+          choice: _selectedChoice, homeCity: _homeCity,
+          updater: _changeCity,
+          todayEntry: _today, weeklyForecast: _week,
+      ),
     );
   }
 
@@ -145,12 +149,16 @@ const List<Choice> choices = const <Choice>[
 
 
 class ChoiceCard extends StatelessWidget{
-  const ChoiceCard({ Key key, this.choice, this.todayEntry, this.weeklyForecast }) : super(key: key);
+  const ChoiceCard({
+    Key key, this.choice, this.homeCity, this.updater,
+    this.todayEntry, this.weeklyForecast
+  }) : super(key: key);
 
   final Choice choice;
   final TodayEntry todayEntry;
   final WeeklyForecast weeklyForecast;
-  //final CityEntry homeCity;
+  final CityEntry homeCity;
+  final ValueChanged<CityEntry> updater;
   @override
   Widget build(BuildContext context){
     switch (choice.title){
@@ -159,7 +167,7 @@ class ChoiceCard extends StatelessWidget{
       case 'Week':
         return new WeeklyPage(weeklyForecast);
       default:
-        return new MyHomePage();
+        return new LocationPage(currentCity: this.homeCity, updater: this.updater);
     }
   }
 }
