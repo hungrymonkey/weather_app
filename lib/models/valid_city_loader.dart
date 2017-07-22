@@ -1,36 +1,38 @@
-import 'dart:io';
-import 'dart:convert';
+
 import 'dart:async' show Future;
 import 'package:flutter/services.dart' show rootBundle;
 import './../shared/trie.dart';
 //declared in pubspec
-const CITY_LIST = 'data/valid_cities.txt';
+const CITY_LIST = 'assets/res/valid_cities.txt';
 
 class CityNames{
   List<String> locations;
   Trie cTrie;
-  CityNames(): cTrie = _handleTrie(){
-
+  CityNames() {
+    _handleTrie().then((Trie t ) => cTrie = t);
   }
   Future<Set<String>> autocomplete(String s) async {
     return cTrie.autocomplete(s);
   }
-  contains(String word){
-    cTrie.contains(word);
+  static Future<Trie> createTrie() async {
+    return await _handleTrie();
   }
-  static Future<String> _handleTrie() sync{
-    var t = new Trie();
-    rootBundle.loadString('assets/config.json').then(
-        (String s) {
-          for ()
-        }
-    );
-    /*
-    final file = new File(CITY_LIST);
-    file.openRead()
-        .transform(UTF8.decoder).transform(new LineSplitter())
-        .forEach((word) => t.insert(word));
-        */
+  bool contains(String word){
+    return cTrie.contains(word);
+  }
+  static Future<String> _loadData(String path) async {
+    return await rootBundle.loadString(path);
+  }
+
+  static Future<Trie> _handleTrie() async {
+    return await rootBundle.loadStructuredData(CITY_LIST, parseFile);
+
+  }
+  static Future<Trie> parseFile(String) async{
+    Trie t = new Trie();
+    for( var s in String.split('\n')){
+      t.insert(s);
+    }
     return t;
   }
 }

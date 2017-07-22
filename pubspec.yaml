@@ -21,8 +21,8 @@ flutter:
   # the Icons class.
   uses-material-design: true
   assets:
-    - data/city.list.json
-    - data/valid_cities.txt
+    - assets/res/city.list.json
+    - assets/res/valid_cities.txt
   # To add assets to your application, add an assets section here, in
   # this "flutter" section, as in:
   # assets:

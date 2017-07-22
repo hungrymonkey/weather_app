@@ -14,13 +14,13 @@ const double _kFlexibleSpaceMaxHeight = 128.0;
 class _LocationPage extends State<LocationPage>{
   CityNames _cityNames;
   String _searchingQuery = '';
-  String _resultQuery = '';
   Set<String> _fetchCities;
 
   @override
   void initState(){
     super.initState();
     _cityNames = new CityNames();
+    _fetchCities = new Set();
   }
   void sendUpdates(CityEntry value){
     if(widget.updater != null)
@@ -61,12 +61,14 @@ class _LocationPage extends State<LocationPage>{
   }
 
   Widget _buildValidCities(BuildContext context){
-    if (_fetchCities == null) { // NOTE which means loading
-      return new SliverFillRemaining(
-          child: new Center(
-              child: new CircularProgressIndicator()
-          )
-      );
+    if (_fetchCities.isEmpty) { // NOTE which means loading
+      if(_searchingQuery != ''){
+        return new SliverFillRemaining(
+            child: new Center(
+                child: new CircularProgressIndicator()
+            )
+        );
+      }
     }
     return
 
@@ -77,12 +79,10 @@ class _LocationPage extends State<LocationPage>{
                 margin: const EdgeInsets.all(8.0),
                 child: new Card(
                   child: new Column(
-                      children: <Widget>[
-                        _createEntry(context, "Los Angles,US"),
-                      const Divider(),
-                      _createEntry(context, "Tokyo,JP")
-                      ]
+                      children:
+                      _buildCityEntry( context),
                   ),
+
                 )
               )
             ]
@@ -106,8 +106,20 @@ class _LocationPage extends State<LocationPage>{
         )
     );
   }
+  List<Widget> _buildCityEntry( BuildContext context){
+    print(_fetchCities.toString());
+    if( _fetchCities.isNotEmpty ) {
+      var l = new List();
+      for (var c in _fetchCities) {
+        l.add(_createEntry(context, c));
+        l.add(const Divider());
+      }
+      l.removeLast();
+      return l;
+    }else
+      return [];
+  }
   Widget _createEntry(BuildContext context, String s){
-
     return new ListTile(
         dense: true,
         title: new Text(s,),
@@ -127,7 +139,18 @@ class _LocationPage extends State<LocationPage>{
 
     setState((){
       _searchingQuery = str;
-      _fetchCities = null;
+      _fetchCities = new Set();
+    });
+    print('*******' + _searchingQuery + 'not fetch');
+
+    _cityNames.autocomplete(_searchingQuery).then((Set<String> s ){
+      setState((){
+        _fetchCities = s;
+        print('*******' + _searchingQuery + 'fetch');
+        print(_cityNames.contains("Toyko,JP") );
+
+        print(_fetchCities.toString());
+      });
     });
 
 
