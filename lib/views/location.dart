@@ -46,8 +46,7 @@ class _LocationPage extends State<LocationPage>{
     print('********* Location Page');
     final TextStyle captionTextStyle =
     Theme.of(context).textTheme.display1.copyWith(color: Colors.white, fontSize: 30.0);
-    return new Scaffold(
-      body: new CustomScrollView(
+    return new CustomScrollView(
         slivers: <Widget>[
           new SliverAppBar(
               expandedHeight: _kFlexibleSpaceMaxHeight,
@@ -71,8 +70,7 @@ class _LocationPage extends State<LocationPage>{
           ),
           _buildValidCities(context),
         ]
-      ),
-    );
+      );
   }
 
   Widget _buildValidCities(BuildContext context){
