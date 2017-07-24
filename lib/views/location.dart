@@ -77,9 +77,14 @@ class _LocationPage extends State<LocationPage>{
     if (_fetchCities.isEmpty) { // NOTE which means loading
       if(_searchingQuery != ''){
         return new SliverFillRemaining(
-            child: new Center(
-                child: new CircularProgressIndicator()
-            )
+            child: new Container(
+              margin: const EdgeInsets.all(8.0),
+              child: new Card(
+                  child: new Center(
+                    child: new Text(_searchingQuery + ' not Found'),
+                ),
+              ),
+            ),
         );
       }
     }

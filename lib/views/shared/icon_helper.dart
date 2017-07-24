@@ -23,7 +23,11 @@ class _IconLoader extends State<IconLoader>{
 
   Future<Null> _getImg() async {
     final Uint8List bytes = await http.readBytes('${widget.ICON_BASE_URL}${widget.iconType}.png');
-    setState((){ image = new Image.memory(bytes);});
+    if(mounted) {
+      setState(() {
+        image = new Image.memory(bytes);
+      });
+    }
   }
 
   @override
