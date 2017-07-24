@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'shared/city_entry.dart';
 import 'models/weather_entry.dart';
 import 'views/today.dart';
-import 'views/home.dart';
 import 'views/weekly.dart';
 import 'views/location.dart';
 import 'models/valid_city_loader.dart';
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Boring Weather App',
       theme: new ThemeData(
         // This is the theme of your application.
         //
