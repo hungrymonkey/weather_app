@@ -1,6 +1,8 @@
 # weatherforcast
 
-A new Flutter project.
+This weather app uses http://api.openweathermap.org
+to fetch weather data. Currently, this project only grabs Japan and
+United States cities.
 
 ## Getting Started
 
